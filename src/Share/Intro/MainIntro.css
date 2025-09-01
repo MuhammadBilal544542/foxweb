@@ -1,0 +1,15 @@
+.logo-text {
+  font-size: 3rem;
+  font-weight: bold;
+  font-family: 'Roboto';
+  margin-bottom: 4px; /* small space below heading */
+}
+
+.login-description {
+  font-size: 3rem;              /* readable size for description */
+  color: #555;                  /* subtle gray */
+  font-weight: bold;           /* normal weight */
+  text-align: center;
+  font-family: 'Roboto';
+  margin-top: 0;                /* remove extra top space */
+}
