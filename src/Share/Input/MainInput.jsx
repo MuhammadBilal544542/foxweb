@@ -29,7 +29,7 @@ const MainInput = ({
           onChange={onChange}
           onBlur={onBlur}
           maxLength={maxLength}
-          className="w-100 bg-white border-0 text-black"
+          className="w-100 bg-white border-0 text-black p-0"
           placeholder={placeholder}
           style={{ height: "40px", outline: "none", boxShadow: "none" }}
         />

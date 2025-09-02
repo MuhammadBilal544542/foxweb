@@ -1,92 +1,79 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
-import MainButton from '../../../Share/Button/MainButton';
-import MainIntro from '../../../Share/Intro/MainIntro';
+import { Container, Row, Col } from "react-bootstrap";
+import MainButton from "../../../Share/Button/MainButton";
+import MainIntro from "../../../Share/Intro/MainIntro";
+import LeftSideLogo from "../../../Share/LogoSidePage/LeftSideLogo";
+import { useNavigate } from "react-router-dom";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import { OtpInput } from "reactjs-otp-input";
+import { useState } from "react";
+const EmailOTPVerification = () => {
+  const [otp, setOtp] = useState("");
+  const navigate = useNavigate();
 
-// OTP Input Component
-function OtpInput({ length = 6, onChange }) {
-  const [otp, setOtp] = useState(Array(length).fill(''));
-  const inputsRef = useRef([]);
-
-  useEffect(() => {
-    inputsRef.current[0]?.focus(); // focus first input on mount
-  }, []);
-
-  const handleChange = (e, index) => {
-    const value = e.target.value;
-    if (!/^[0-9]?$/.test(value)) return; // Only numbers
-
-    const newOtp = [...otp];
-    newOtp[index] = value;
-    setOtp(newOtp);
-    onChange(newOtp.join(''));
-
-    if (value && index < length - 1) {
-      inputsRef.current[index + 1]?.focus();
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("OTP Submitted:", otp);
   };
-
-  const handleKeyDown = (e, index) => {
-    if (e.key === 'Backspace') {
-      const newOtp = [...otp];
-      newOtp[index] = '';
-      setOtp(newOtp);
-      onChange(newOtp.join(''));
-
-      if (index > 0 && !otp[index]) {
-        inputsRef.current[index - 1]?.focus();
-      }
-    }
-  };
-
   return (
-    <div className="otp-container">
-      {otp.map((digit, index) => (
-        <input
-          key={index}
-          ref={(el) => (inputsRef.current[index] = el)}
-          type="text"
-          maxLength={1}
-          value={digit}
-          onChange={(e) => handleChange(e, index)}
-          onKeyDown={(e) => handleKeyDown(e, index)}
-          className="otp-input"
-        />
-      ))}
-    </div>
-  );
-}
+    <div className="login-screen">
+      <Container fluid>
+        <Row className="min-vh-100">
+          <Col
+            md={5}
+            className="bg-black d-flex justify-content-center align-items-center custom-radius"
+          >
+            <LeftSideLogo />
+          </Col>
 
+          <Col md={7}>
+            <Row className="justify-content-center align-items-center h-100">
+              <div className="badge ">
+                <button
+                  onClick={() => navigate(-1)}
+                  className="d-flex align-items-center gap-1 bg-black text-white border-0 p-2 mx-3 rounded"
+                >
+                  <IoMdArrowRoundBack size={15} /> Back
+                </button>
+              </div>
+              <Col md={12}>
+                <MainIntro
+                  heading="Verify your email OTP"
+                  description="Enter your email OTP and reset your password."
+                />
 
+                <Row className="justify-content-center">
+                  <Col md={7}>
+                    <form onSubmit={handleSubmit}>
+                      <OtpInput
+                        value={otp}
+                        onChange={setOtp}
+                        numInputs={6}
+                        separator={<span>-</span>}
+                        inputStyle={{
+                          width: "3rem",
+                          height: "3rem",
+                          margin: "0 0.5rem",
+                          fontSize: "1.5rem",
+                          borderRadius: "8px",
+                          border: "1px solid #ccc",
+                        }}
+                      />
 
-
-// Mobile Verification Screen
-function EmailOTPVerification() {
-  const [otpCode, setOtpCode] = useState('');
-
-  const HandleMobileVerification = () => {
-    console.log('Entered OTP:', otpCode);
-  };
-
-  return (
-     <div className="register-screen">
-      <Container fluid className="h-100">
-        <Row className="h-100">
-          <Col md={7} className="register-right d-flex justify-content-center align-items-center">
-            <div className="w-50">
-              <MainIntro
-                heading="Email Verification"
-                description="Enter the 6-digit OTP sent to your Email to verify your account and secure access."
-              />
-             <OtpInput length={6} onChange={(code) => setOtpCode(code)} />
-              <br />
-              <MainButton name="Submit" onClick={HandleMobileVerification} />
-            </div>
+                      <MainButton
+                        btnClassName="text-uppercase bg-black border-0 w-100 p-3 mt-5 text-white"
+                        type="submit"
+                        Text="Verify OTP"
+                      />
+                    </form>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
           </Col>
         </Row>
       </Container>
     </div>
   );
-}
+};
 
 export default EmailOTPVerification;

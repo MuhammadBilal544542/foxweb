@@ -1,11 +1,12 @@
 import React from 'react'
+import { Button } from 'react-bootstrap'
 
 
-const MainButton = ({ name, onClick , btnClassName}) => {
+const MainButton = ({type, Text, onClick , btnClassName}) => {
   return (
-    <button className={btnClassName} style={{ height: "60px" }} onClick={onClick}>
-      {name}
-    </button>
+    <Button type={type} className={btnClassName} onClick={onClick}>
+      {Text}
+    </Button>
   )
 }
 
