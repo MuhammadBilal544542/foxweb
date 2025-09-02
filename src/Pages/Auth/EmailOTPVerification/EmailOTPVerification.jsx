@@ -22,6 +22,7 @@ const EmailOTPVerification = () => {
             md={5}
             className="bg-black d-flex justify-content-center align-items-center custom-radius"
           >
+            
             <LeftSideLogo />
           </Col>
 
