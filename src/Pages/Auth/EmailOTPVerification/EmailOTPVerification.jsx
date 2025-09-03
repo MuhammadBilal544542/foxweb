@@ -13,6 +13,7 @@ const EmailOTPVerification = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("OTP Submitted:", otp);
+    
   };
   return (
     <div className="login-screen">
