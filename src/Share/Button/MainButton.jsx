@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap'
 
 const MainButton = ({type, Text, onClick , btnClassName}) => {
   return (
-    <Button type={type} className={btnClassName} onClick={onClick}>
+    <Button type={type} className={`${btnClassName} activeBtn`} onClick={onClick}>
       {Text}
     </Button>
   )

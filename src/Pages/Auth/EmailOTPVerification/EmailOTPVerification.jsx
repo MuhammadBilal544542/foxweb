@@ -13,7 +13,7 @@ const EmailOTPVerification = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("OTP Submitted:", otp);
-    
+
   };
   return (
     <div className="login-screen">
@@ -29,14 +29,14 @@ const EmailOTPVerification = () => {
 
           <Col md={7}>
             <Row className="justify-content-center align-items-center h-100">
-              <div className="badge ">
+              {/* <div className="badge ">
                 <button
                   onClick={() => navigate(-1)}
                   className="d-flex align-items-center gap-1 bg-black text-white border-0 p-2 mx-3 rounded"
                 >
                   <IoMdArrowRoundBack size={15} /> Back
                 </button>
-              </div>
+              </div> */}
               <Col md={12}>
                 <MainIntro
                   heading="Verify your email OTP"

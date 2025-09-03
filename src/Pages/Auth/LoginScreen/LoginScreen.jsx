@@ -112,7 +112,7 @@ const LoginScreen = () => {
                       />
                     </form>
                     <div className="text-center mt-4">
-                      <Link to="/registerMobileScreen">Don't have an account? <span className="text-decoration-underline">Sign up</span></Link>
+                      <Link to="/sigUpProfile">Don't have an account? <span className="text-decoration-underline">Sign up</span></Link>
                     </div>
 
 

@@ -38,8 +38,8 @@ const MainInput = ({
       {/* Error Message */}
       {error && (
         <label
-          className="text-danger mt-1 d-block"
-          style={{ fontSize: "12px" }}
+          className="text-danger mt-0 mb-1 d-block marginTop"
+          style={{ fontSize: "12px"}}
         >
           {error}
         </label>

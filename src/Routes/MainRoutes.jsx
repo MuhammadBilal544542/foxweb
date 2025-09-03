@@ -9,6 +9,8 @@ import Subscription from '../Pages/Subscription/Subscription.jsx';
 import ForgotPassword from "../Pages/Auth/ForgotPassword/ForgotPassword.jsx";
 import SetNewPassword from "../Pages/Auth/SetNewPassword/SetNewPasswsord.jsx";
 import EmailOTPVerification from "../Pages/Auth/EmailOTPVerification/EmailOTPVerification.jsx";
+import SigUpProfile from "../Pages/Auth/SigUpProfile/SigUpProfile.jsx";
+import NumberVerification from "../Pages/Auth/RegisterMobile/RegisterMobileScreen.jsx";
 
 const RoutesPage = () => {
     const usersRouts = [
@@ -16,6 +18,8 @@ const RoutesPage = () => {
         { path: "/forgotPassword", element: <ForgotPassword /> },
         { path: "/setNewPassword", element: <SetNewPassword /> },
         { path: "/emailOTPVerification", element: <EmailOTPVerification /> },
+        { path: "/sigUpProfile", element: <SigUpProfile /> },
+        { path: "/numberVerification", element: <NumberVerification /> },
    
     ];
 
