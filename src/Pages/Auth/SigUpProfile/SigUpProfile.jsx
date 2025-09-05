@@ -16,9 +16,16 @@ const SigUpProfile = () => {
   const dispatch = useDispatch();
 
   const handleSigUpProfile = async (values) => {
+    const formData = new FormData();
+    formData.append("firstName", values.firstName);
+    formData.append("lastName", values.lastName);
+    formData.append("dob", values.dob);
+    formData.append("gender", values.gender);
+    formData.append("profileImage", values.profileImage); // file correctly attach
+
     const data = {
       apiEndpoint: "/api/Signup/update-UserProfile",
-      requestData: JSON.stringify({ ...values }),
+      requestData: formData,
     };
 
     dispatch(sigUpProfile(data)).then((res) => {
@@ -76,7 +83,11 @@ const SigUpProfile = () => {
     },
   ];
 
-
+  const genderOptions = [
+    { id: "M", value: "Male", label: "Male" },
+    { id: "F", value: "Female", label: "Female" },
+    { id: "O", value: "Other", label: "Other" },
+  ];
 
   return (
     <div className="login-screen">
@@ -153,32 +164,22 @@ const SigUpProfile = () => {
 
                       <Row className="mt-3">
                         <Col md={12}>
-                          <span className="me-4">
-                            <input
-                              type="radio"
-                              name="gender"
-                              id="M"
-                              value="Male"
-                              onChange={handleChange}
-                              checked={values.gender === "Male"}
-                            />
-                            <label className="ms-2" htmlFor="M">
-                              Male
-                            </label>
-                          </span>
-                          <span>
-                            <input
-                              type="radio"
-                              name="gender"
-                              id="F"
-                              value="Female"
-                              onChange={handleChange}
-                              checked={values.gender === "Female"}
-                            />
-                            <label className="ms-2" htmlFor="F">
-                              Female
-                            </label>
-                          </span>
+                          {genderOptions.map((option) => (
+                            <span key={option.id} className="me-4">
+                              <input
+                                type="radio"
+                                name="gender"
+                                id={option.id}
+                                value={option.value}
+                                onChange={handleChange}
+                                checked={values.gender === option.value}
+                              />
+                              <label className="ms-2" htmlFor={option.id}>
+                                {option.label}
+                              </label>
+                            </span>
+                          ))}
+
                           {touched.gender && errors.gender && (
                             <div
                               className="text-danger"
