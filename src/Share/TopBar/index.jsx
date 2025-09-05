@@ -5,16 +5,17 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "react-bootstrap";
+import {Link} from 'react-router-dom'
 // import MainModal from "../Modal/Modal";
 
 import logoImage from "../../assets/Gallery/Logo/Logo.png";
 // import { customLogout } from "../../Redux/features/User/userSlice";
 // import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { FaUserCircle, FaBell } from "react-icons/fa";
 
 const TopBar = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   // const dispatch = useDispatch();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => {
@@ -34,24 +35,25 @@ const TopBar = () => {
     setModal(!modal);
   };
 
-  const handleLogout = () => {
-    // dispatch(customLogout());
-    setModal(!modal);
-    navigate("/");
-  };
+  // const handleLogout = () => {
+  //   dispatch(customLogout());
+  //   setModal(!modal);
+  //   navigate("/");
+  // };
 
   return (
     <>
       <div id="Topbar" className="">
         <div className="user">
           <div className="logo">
-            <p className="text-white fw-bold ps-2 m-0 d-sm-block d-none">Fox</p>
+            <Link to="/home">
             <img
               className="image-fluid"
               src={logoImage}
               alt=""
               maxWidth={250}
-            />
+              />
+              </Link>
           </div>
           <div className="image ms-2">
             <Dropdown

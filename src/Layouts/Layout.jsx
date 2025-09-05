@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import TopBar from "../Share/TopBar/index";
 import NavBar from "../Share/SideBar/HamBurger/NavBar/Index";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 const Layout = (props) => {
-    const user = true
-//   const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
   const [isOpen, setIsOpen] = useState(false);
   const Show = () => {
     setIsOpen(!isOpen);
@@ -18,7 +17,7 @@ const Layout = (props) => {
         className={user ? "p-3 vh-100" : "vh-100"}
         id="GeneralLayout"
       >
-        <Row id="GeneralRow" className="">
+        <Row id="GeneralRow BIlal" className="">
           {user ? (
             <>
               <Col
@@ -48,7 +47,7 @@ const Layout = (props) => {
             </>
           ) : (
             <>
-              <Col md={12} className="vh-100">
+              <Col md={12} className="vh-100 p-0">
                 <>{props.children}</>
               </Col>
             </>

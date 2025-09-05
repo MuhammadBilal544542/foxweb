@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { OtpInput } from "reactjs-otp-input";
 import { useState } from "react";
-const EmailOTPVerification = () => {
+const OTPVerification = () => {
   const [otp, setOtp] = useState("");
   const navigate = useNavigate();
 
@@ -39,8 +39,8 @@ const EmailOTPVerification = () => {
               </div> */}
               <Col md={12}>
                 <MainIntro
-                  heading="Verify your email OTP"
-                  description="Enter your email OTP and reset your password."
+                  heading="Verify your OTP"
+                  description="Enter your OTP and reset your password."
                 />
 
                 <Row className="justify-content-center">
@@ -78,4 +78,4 @@ const EmailOTPVerification = () => {
   );
 };
 
-export default EmailOTPVerification;
+export default OTPVerification;
