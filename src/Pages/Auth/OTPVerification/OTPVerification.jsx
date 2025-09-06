@@ -2,18 +2,35 @@ import { Container, Row, Col } from "react-bootstrap";
 import MainButton from "../../../Share/Button/MainButton";
 import MainIntro from "../../../Share/Intro/MainIntro";
 import LeftSideLogo from "../../../Share/LogoSidePage/LeftSideLogo";
-import { useNavigate } from "react-router-dom";
-import { IoMdArrowRoundBack } from "react-icons/io";
+import { useNavigate, useLocation } from "react-router-dom";
 import { OtpInput } from "reactjs-otp-input";
 import { useState } from "react";
+import { otpVerification } from "../../../Redux/features/User/userApi";
+import { useDispatch } from "react-redux";
 const OTPVerification = () => {
   const [otp, setOtp] = useState("");
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  const location = useLocation();
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("OTP Submitted:", otp);
+    handleOTPVerification();
+  };
 
+  const handleOTPVerification = () => {
+    const data = {
+      apiEndpoint: "/api/Signup/verify-UserOTP",
+      requestData: { userId: location?.state?.details?.id, otp: otp },
+    };
+
+    dispatch(otpVerification(data)).then((res) => {
+      if (res.type === "otpVerification/fulfilled") {
+        navigate("/setNewPassword", {
+          state: { details: location?.state?.details },
+        });
+      }
+    });
   };
   return (
     <div className="login-screen">
@@ -23,20 +40,11 @@ const OTPVerification = () => {
             md={5}
             className="bg-black d-flex justify-content-center align-items-center custom-radius"
           >
-            
             <LeftSideLogo />
           </Col>
 
           <Col md={7}>
             <Row className="justify-content-center align-items-center h-100">
-              {/* <div className="badge ">
-                <button
-                  onClick={() => navigate(-1)}
-                  className="d-flex align-items-center gap-1 bg-black text-white border-0 p-2 mx-3 rounded"
-                >
-                  <IoMdArrowRoundBack size={15} /> Back
-                </button>
-              </div> */}
               <Col md={12}>
                 <MainIntro
                   heading="Verify your OTP"

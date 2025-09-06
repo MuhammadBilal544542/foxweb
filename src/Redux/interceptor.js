@@ -2,10 +2,11 @@ import axios from "axios";
 import { customLogout } from "./features/User/userSlice";
 
 const axiosInstance = axios.create({
-  // baseURL: `https://shelters.catalystpet.com/api/v1`,
-  // baseURL: `http://10.3.1.56:3000/api/v1/`,
-  // baseURL: `http://10.3.100.173:3000/api/v1/`, //local
-  baseURL: `https://foxhouse.onrender.com/`, // Live
+  baseURL:
+    process.env.NODE_ENV === "development"
+      ? "" // Dev mode -> use proxy (package.json proxy)
+      : process.env.REACT_APP_BACKEND_BASE_URL, // Prod mode -> .env base URL
+  withCredentials: false,
 });
 
 var storeModule;

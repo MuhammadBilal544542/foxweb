@@ -1,51 +1,64 @@
-import React from "react";
 import * as Yup from "yup";
-import { Form, useFormik } from "formik";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { Container, Row, Col, Spinner } from "react-bootstrap";
-import MainInput from "../../../Share/Input/MainInput";
+import { useFormik } from "formik";
+import { useEffect, useState } from "react";
+import PhoneInput from "react-phone-input-2";
+import { useNavigate } from "react-router-dom";
 import MainIntro from "../../../Share/Intro/MainIntro";
+import { useDispatch } from "react-redux";
 import MainButton from "../../../Share/Button/MainButton";
-import { numberVerification } from "../../../Redux/features/User/userApi";
+import { Container, Row, Col, Spinner } from "react-bootstrap";
 import LeftSideLogo from "../../../Share/LogoSidePage/LeftSideLogo";
+import {
+  numberVerification,
+  getCountryCode,
+} from "../../../Redux/features/User/userApi";
 
 const NumberVerification = () => {
-  const { loading } = useSelector((state) => state.user);
-
+  const [registerNumber, setRegisterNumber] = useState({});
+  const [countryList, setCountryList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [userDetails, setUserDetails] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleMobileNumber = async (values) => {
-    const data = {
-      apiEndpoint: "/api/Signup/register-number",
-      // requestData: JSON.stringify({ ...values }),
-    };
-
-    dispatch(numberVerification(data)).then((res) => {
-      if (res.type === "numberVerification/fulfilled") {
-        navigate("/otpVerification");
+  // get all Country Code api call
+  useEffect(() => {
+    const data = { apiEndpoint: "/api/Signup/getAllCountries" };
+    dispatch(getCountryCode(data)).then((res) => {
+      if (res.type === "getCountryCode/fulfilled") {
+        setCountryList(res?.payload);
       }
     });
-  };
+  }, [dispatch]);
 
+  // Yup Validation Schema
   const loginSchema = Yup.object().shape({
     number: Yup.string()
       .matches(/^[0-9]{10,15}$/, "Enter a valid number")
       .required("Number is required"),
+    countryCode: Yup.string().required("Country code is required"),
   });
-console.log("loading ------------- >" , loading)
-  const {
-    handleSubmit,
-    handleBlur,
-    handleChange,
-    values,
-    touched,
-    errors,
-  } = useFormik({
-    initialValues: { number: "" },
+
+  // Formik setup
+  const { handleSubmit, values, touched, errors, setFieldValue } = useFormik({
+    initialValues: { number: "", countryCode: "" },
     validationSchema: loginSchema,
-    onSubmit: handleMobileNumber,
+    onSubmit: async (values) => {
+      const data = {
+        apiEndpoint: "/api/Signup/register-number",
+        requestData: { ...registerNumber },
+      };
+
+      dispatch(numberVerification(data)).then((res) => {
+        if (res.type === "numberVerification/fulfilled") {
+          setLoading(true);
+          navigate("/otpVerification", {
+            state: { details: userDetails },
+          });
+          setLoading(false);
+        }
+      });
+    },
   });
 
   return (
@@ -69,24 +82,55 @@ console.log("loading ------------- >" , loading)
                 <Row className="justify-content-center align-items-center">
                   <Col md={7}>
                     <form onSubmit={handleSubmit}>
-                      <MainInput
-                        type="number"
-                        name="number"
-                        label="Number"
-                        placeholder="Enter your Number"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
+                      {/* Phone Input integrated with Formik */}
+                      <PhoneInput
+                        country={"pk"}
                         value={values.number}
-                        error={
-                          touched.number && errors.number ? errors.number : ""
-                        }
+                        onChange={(value, country) => {
+                          setFieldValue("number", value);
+                          setFieldValue("countryCode", country.dialCode);
+
+                          // find country details from countryList
+                          const selectedCountry = countryList?.data?.find(
+                            (c) => c.countryCode === `+${country.dialCode}`
+                          );
+
+                          if (selectedCountry) {
+                            setUserDetails(selectedCountry);
+                            const finalObject = {
+                              number: value,
+                              phonecode: `+${country.dialCode}`,
+                              countryName: selectedCountry.countryName,
+                              currencyName: selectedCountry.currencyName,
+                              currencyCode: selectedCountry.currencyCode,
+                              currencySymbol: selectedCountry.currencySymbol,
+                            };
+
+                            setRegisterNumber(finalObject);
+                            console.log("Register Object =>", finalObject);
+                          }
+                        }}
+                        onlyCountries={["pk", "gb"]}
+                        preferredCountries={["pk", "gb"]}
+                        inputStyle={{ width: "100%" }}
                       />
 
+                      {errors.number && touched.number && (
+                        <p style={{ color: "red" }}>{errors.number}</p>
+                      )}
+
+                      {/* Submit Button */}
                       <MainButton
                         btnClassName="text-uppercase bg-black border-0 w-100 p-3 mt-5"
                         type="submit"
-                        Text={!values ? <Spinner animation="border" size="sm" /> : "Next"}
-                        disabled={!values.number}
+                        Text={
+                          loading ? (
+                            <Spinner animation="border" size="sm" />
+                          ) : (
+                            "Next"
+                          )
+                        }
+                        disabled={!values.number || loading}
                       />
                     </form>
                   </Col>

@@ -42,6 +42,10 @@ import {
   adminChangeShelterStatus,
   reminderEmailsPermission,
   getAdopterDetailsFromLink,
+  // ------------- Number Verification -------------
+  numberVerification,
+  otpVerification,
+  setNewPassword,
 } from "./userApi";
 
 export const userSlice = createSlice({
@@ -481,10 +485,40 @@ export const userSlice = createSlice({
       })
       .addCase(getShopifyProducts.rejected, (state) => {
         state.loading = "failed";
+      })
+// ---------------------- Number Verification --------------------
+
+      .addCase(numberVerification.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(numberVerification.fulfilled, (state) => {
+        state.loading = "succeeded";
+      })
+      .addCase(numberVerification.rejected, (state) => {
+        state.loading = "failed";
+      })
+      // ------------------------------------------------------
+      .addCase(otpVerification.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(otpVerification.fulfilled, (state) => {
+        state.loading = "succeeded";
+      })
+      .addCase(otpVerification.rejected, (state) => {
+        state.loading = "failed";
+      })
+      // ------------------------------------------------------
+      .addCase(setNewPassword.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(setNewPassword.fulfilled, (state) => {
+        state.loading = "succeeded";
+      })
+      .addCase(setNewPassword.rejected, (state) => {
+        state.loading = "failed";
       });
   },
 });
 
 export const { customLogout, setRecordsPerPage } = userSlice.actions;
-
 export default userSlice.reducer;

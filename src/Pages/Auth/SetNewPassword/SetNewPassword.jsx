@@ -1,17 +1,35 @@
+import * as Yup from "yup";
 import { useState } from "react";
+import { useFormik } from "formik";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
+import MainIntro from "../../../Share/Intro/MainIntro";
 import MainInput from "../../../Share/Input/MainInput";
 import MainButton from "../../../Share/Button/MainButton";
-import MainIntro from "../../../Share/Intro/MainIntro";
 import LeftSideLogo from "../../../Share/LogoSidePage/LeftSideLogo";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { Link, useNavigate } from "react-router-dom";
-import { IoMdArrowRoundBack } from "react-icons/io";
+import { setNewPassword } from "../../../Redux/features/User/userApi";
 
 const SetNewPassword = () => {
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const userDetails = location?.state?.details;
+  console.log("userDetails------------>", userDetails);
+  const handleSetNewPassword = () => {
+    const data = {
+      apiEndpoint: "/api/Signup/register-Password",
+      requestData: { password: values.password },
+    };
+
+    dispatch(setNewPassword(data)).then((res) => {
+      if (res.type === "setNewPassword/fulfilled") {
+        navigate("/login"); 
+      }
+    });
+  };
 
   // ✅ Validation schema
   const schema = Yup.object({
@@ -29,16 +47,15 @@ const SetNewPassword = () => {
       .required("Confirm Password is required"),
   });
 
-  const formik = useFormik({
-    initialValues: {
-      password: "",
-      confirmPassword: "",
-    },
-    validationSchema: schema,
-    onSubmit: (values) => {
-      console.log("Form submitted:", values);
-    },
-  });
+  const { handleBlur, handleSubmit, values, touched, errors, handleChange } =
+    useFormik({
+      initialValues: {
+        password: "",
+        confirmPassword: "",
+      },
+      validationSchema: schema,
+      onSubmit: handleSetNewPassword,
+    });
 
   return (
     <div className="login-screen">
@@ -53,14 +70,6 @@ const SetNewPassword = () => {
 
           <Col md={7}>
             <Row className="justify-content-center align-items-center h-100">
-              {/* <div className="badge ">
-                <button
-                  onClick={() => navigate(-1)}
-                  className="d-flex align-items-center gap-1 bg-black text-white border-0 p-2 mx-3 rounded"
-                >
-                  <IoMdArrowRoundBack size={15} /> Back
-                </button>
-              </div> */}
               <Col md={12}>
                 <MainIntro
                   heading="Set New Password"
@@ -69,19 +78,19 @@ const SetNewPassword = () => {
 
                 <Row className="justify-content-center">
                   <Col md={7}>
-                    <form onSubmit={formik.handleSubmit}>
+                    <form onSubmit={handleSubmit}>
                       {/* Password Field */}
                       <MainInput
                         type={showPassword ? "text" : "password"}
                         name="password"
                         label="Password"
                         placeholder="Enter your password"
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
-                        value={formik.values.password}
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.password}
                         error={
-                          formik.touched.password && formik.errors.password
-                            ? formik.errors.password
+                          touched.password && errors.password
+                            ? errors.password
                             : ""
                         }
                       />
@@ -92,13 +101,12 @@ const SetNewPassword = () => {
                         name="confirmPassword"
                         label="Confirm Password"
                         placeholder="Re-enter your password"
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
-                        value={formik.values.confirmPassword}
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.confirmPassword}
                         error={
-                          formik.touched.confirmPassword &&
-                          formik.errors.confirmPassword
-                            ? formik.errors.confirmPassword
+                          touched.confirmPassword && errors.confirmPassword
+                            ? errors.confirmPassword
                             : ""
                         }
                       />

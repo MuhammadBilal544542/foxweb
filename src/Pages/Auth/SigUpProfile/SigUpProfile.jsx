@@ -21,7 +21,7 @@ const SigUpProfile = () => {
     formData.append("lastName", values.lastName);
     formData.append("dob", values.dob);
     formData.append("gender", values.gender);
-    formData.append("profileImage", values.profileImage); // file correctly attach
+    formData.append("profileImage", values.profileImage); 
 
     const data = {
       apiEndpoint: "/api/Signup/update-UserProfile",
@@ -86,7 +86,7 @@ const SigUpProfile = () => {
   const genderOptions = [
     { id: "M", value: "Male", label: "Male" },
     { id: "F", value: "Female", label: "Female" },
-    { id: "O", value: "Other", label: "Other" },
+    // { id: "O", value: "Other", label: "Other" },
   ];
 
   return (
@@ -123,26 +123,27 @@ const SigUpProfile = () => {
                           )
                         }
                       />
-
-                      <label
-                        htmlFor="img"
-                        className="text-center d-flex justify-content-center align-items-center rounded-circle overflow-hidden border border-black border-2"
-                        style={{ width: "150px", height: "150px" }} // fixed size circle
-                      >
-                        {values.profileImage ? (
-                          <img
-                            src={URL.createObjectURL(values.profileImage)}
-                            alt="preview"
-                            className="w-100 h-100 object-fit-cover"
-                          />
-                        ) : (
-                          <img
-                            src={profileImage}
-                            alt="logo"
-                            className="w-100 h-100 object-fit-cover"
-                          />
-                        )}
-                      </label>
+                      <center>
+                        <label
+                          htmlFor="img"
+                          className="mb-4 text-center d-flex justify-content-center align-items-center rounded-circle overflow-hidden border border-black border-2"
+                          style={{ width: "150px", height: "150px" }} // fixed size circle
+                        >
+                          {values.profileImage ? (
+                            <img
+                              src={URL.createObjectURL(values.profileImage)}
+                              alt="preview"
+                              className="w-100 h-100 object-fit-cover"
+                            />
+                          ) : (
+                            <img
+                              src={profileImage}
+                              alt="logo"
+                              className="w-100 h-100 object-fit-cover"
+                            />
+                          )}
+                        </label>
+                      </center>
 
                       {fields.map((field, index) => (
                         <MainInput

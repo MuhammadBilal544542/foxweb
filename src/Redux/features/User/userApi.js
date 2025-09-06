@@ -569,6 +569,49 @@ export const numberVerification = createAsyncThunk(
   }
 );
 
+// --------------------OTP Verification--------------------
+export const otpVerification = createAsyncThunk(
+  "otpVerification",
+  async ({ apiEndpoint, requestData }, thunkAPI) => {
+    try {
+      const response = await axiosInstance.post(apiEndpoint, requestData);
+      Toaster.success(response?.data?.message);
+      return response?.data?.data;
+    } catch (error) {
+      Toaster.error(error?.response?.data?.data?.message);
+      return thunkAPI.rejectWithValue({ statusCode: error.response.status });
+    }
+  }
+)
+// --------------------Set New Password--------------------
+export const setNewPassword = createAsyncThunk(
+  "setNewPassword",
+  async ({ apiEndpoint, requestData }, thunkAPI) => {
+    try {
+      const response = await axiosInstance.post(apiEndpoint, requestData);
+      Toaster.success(response?.data?.message);
+      return response?.data?.data;
+    } catch (error) {
+      Toaster.error(error?.response?.data?.data?.message);
+      return thunkAPI.rejectWithValue({ statusCode: error.response.status });
+    }
+  }
+);
+
+
+// Get Country  Code Number Verification
+export const getCountryCode = createAsyncThunk(
+  "getCountryCode",
+  async ({ apiEndpoint }, thunkAPI) => {
+    try {
+      const response = await axiosInstance.get(apiEndpoint);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
 
 // SigUp Profile
 export const sigUpProfile = createAsyncThunk(
