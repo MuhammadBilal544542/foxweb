@@ -46,6 +46,7 @@ import {
   numberVerification,
   otpVerification,
   setNewPassword,
+  sigUpProfile,
 } from "./userApi";
 
 export const userSlice = createSlice({
@@ -398,7 +399,7 @@ export const userSlice = createSlice({
       .addCase(Order.pending, (state) => {
         state.loading = "pending";
       })
-      .addCase(Order.fulfilled, (state ) => {
+      .addCase(Order.fulfilled, (state) => {
         state.loading = "succeeded";
       })
       .addCase(Order.rejected, (state) => {
@@ -486,7 +487,7 @@ export const userSlice = createSlice({
       .addCase(getShopifyProducts.rejected, (state) => {
         state.loading = "failed";
       })
-// ---------------------- Number Verification --------------------
+      // ---------------------- Number Verification --------------------
 
       .addCase(numberVerification.pending, (state) => {
         state.loading = "pending";
@@ -505,6 +506,16 @@ export const userSlice = createSlice({
         state.loading = "succeeded";
       })
       .addCase(otpVerification.rejected, (state) => {
+        state.loading = "failed";
+      })
+      // ------------------------------------------------------
+      .addCase(sigUpProfile.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(sigUpProfile.fulfilled, (state) => {
+        state.loading = "succeeded";
+      })
+      .addCase(sigUpProfile.rejected, (state) => {
         state.loading = "failed";
       })
       // ------------------------------------------------------

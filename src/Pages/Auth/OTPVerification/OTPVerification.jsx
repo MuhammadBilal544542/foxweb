@@ -1,17 +1,20 @@
-import { Container, Row, Col } from "react-bootstrap";
-import MainButton from "../../../Share/Button/MainButton";
-import MainIntro from "../../../Share/Intro/MainIntro";
-import LeftSideLogo from "../../../Share/LogoSidePage/LeftSideLogo";
-import { useNavigate, useLocation } from "react-router-dom";
-import { OtpInput } from "reactjs-otp-input";
 import { useState } from "react";
+import { OtpInput } from "reactjs-otp-input";
+import { useDispatch, useSelector } from "react-redux";
+import MainIntro from "../../../Share/Intro/MainIntro";
+import MainButton from "../../../Share/Button/MainButton";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Container, Row, Col, Spinner } from "react-bootstrap";
+import LeftSideLogo from "../../../Share/LogoSidePage/LeftSideLogo";
 import { otpVerification } from "../../../Redux/features/User/userApi";
-import { useDispatch } from "react-redux";
 const OTPVerification = () => {
+  const { loading } = useSelector((state) => state.user);
   const [otp, setOtp] = useState("");
+  const [types, setTYpes] = useState("3");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("OTP Submitted:", otp);
@@ -21,13 +24,20 @@ const OTPVerification = () => {
   const handleOTPVerification = () => {
     const data = {
       apiEndpoint: "/api/Signup/verify-UserOTP",
-      requestData: { userId: location?.state?.details?.id, otp: otp },
+      requestData: {
+        userId: location?.state?.details?.id,
+        otp: otp,
+        type: types,
+      },
     };
 
     dispatch(otpVerification(data)).then((res) => {
       if (res.type === "otpVerification/fulfilled") {
         navigate("/setNewPassword", {
-          state: { details: location?.state?.details },
+          state: {
+            details: location?.state?.details,
+            userNumber: location.state.userNumber,
+          },
         });
       }
     });
@@ -56,6 +66,7 @@ const OTPVerification = () => {
                     <form onSubmit={handleSubmit}>
                       <OtpInput
                         value={otp}
+                        containerStyle={"justify-content-center"}
                         onChange={setOtp}
                         numInputs={6}
                         separator={<span>-</span>}
@@ -72,7 +83,14 @@ const OTPVerification = () => {
                       <MainButton
                         btnClassName="text-uppercase bg-black border-0 w-100 p-3 mt-5 text-white"
                         type="submit"
-                        Text="Verify OTP"
+                        Text={
+                          loading === "pending" ? (
+                            <Spinner animation="border" size="sm" />
+                          ) : (
+                            "Next"
+                          )
+                        }
+                        disabled={otp.length !== 6}
                       />
                     </form>
                   </Col>

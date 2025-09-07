@@ -58,7 +58,7 @@ const LoginScreen = () => {
                   description="Sign in to your Fox account to keep shopping."
                 />
                 <Row className="justify-content-center align-items-center">
-                  <Col md={7}>
+                  <Col sm={9}>
                     <form onSubmit={handleSubmit}>
                       <MainInput
                         className="number"

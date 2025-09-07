@@ -8,7 +8,7 @@ import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 
-const ForgotPassword = () => {
+const EmailVerification = () => {
   const navigate = useNavigate();
 
   const schema = Yup.object({
@@ -94,4 +94,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword;
+export default EmailVerification;

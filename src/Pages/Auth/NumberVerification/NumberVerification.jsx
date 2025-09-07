@@ -50,7 +50,7 @@ const NumberVerification = () => {
         dispatch(numberVerification(data)).then((res) => {
           if (res.type === "numberVerification/fulfilled") {
             navigate("/otpVerification", {
-              state: { details: userDetails },
+              state: { details: userDetails, userNumber: values.number },
             });
           }
         });
@@ -86,50 +86,52 @@ const NumberVerification = () => {
                   description="Please Enter your number"
                 />
                 <Row className="justify-content-center align-items-center">
-                  <Col md={7}>
+                  <Col sm={7}>
                     <form onSubmit={handleSubmit}>
-                      <label htmlFor="phone">Phone Number</label>{" "}
-                      <PhoneInput
-                        id="phone"
-                        className="mobileNumber"
-                        country={"gb"}
-                        value={`${values.countryCode}${values.number}`} // join for display
-                        onChange={(value, country) => {
-                          const localNumber = value.replace(
-                            country.dialCode,
-                            ""
-                          );
-
-                          setFieldValue("number", localNumber);
-                          setFieldValue("countryCode", country.dialCode);
-
-                          // find country details
-                          const selectedCountry = countryList?.data?.find(
-                            (c) => c.countryCode === `+${country.dialCode}`
-                          );
-
-                          if (selectedCountry) {
-                            setUserDetails(selectedCountry);
-                            setPhoneNumberLimit(
-                              selectedCountry?.phoneNumberLimit || 10
+                      <div className="react-phone-input-2">
+                        <label htmlFor="phone">Phone Number</label>{" "}
+                        <PhoneInput
+                          id="phone"
+                          className="mobileNumber"
+                          country={"gb"}
+                          value={`${values.countryCode}${values.number}`} // join for display
+                          onChange={(value, country) => {
+                            const localNumber = value.replace(
+                              country.dialCode,
+                              ""
                             );
 
-                            const finalObject = {
-                              number: localNumber,
-                              phonecode: `+${country.dialCode}`,
-                              countryName: selectedCountry.countryName,
-                              currencyName: selectedCountry.currencyName,
-                              currencyCode: selectedCountry.currencyCode,
-                              currencySymbol: selectedCountry.currencySymbol,
-                            };
+                            setFieldValue("number", localNumber);
+                            setFieldValue("countryCode", country.dialCode);
 
-                            setRegisterNumber(finalObject);
-                          }
-                        }}
-                        onlyCountries={["pk", "gb"]}
-                        preferredCountries={["pk", "gb"]}
-                        inputStyle={{ width: "100%" }}
-                      />
+                            // find country details
+                            const selectedCountry = countryList?.data?.find(
+                              (c) => c.countryCode === `+${country.dialCode}`
+                            );
+
+                            if (selectedCountry) {
+                              setUserDetails(selectedCountry);
+                              setPhoneNumberLimit(
+                                selectedCountry?.phoneNumberLimit || 10
+                              );
+
+                              const finalObject = {
+                                number: localNumber,
+                                phonecode: `+${country.dialCode}`,
+                                countryName: selectedCountry.countryName,
+                                currencyName: selectedCountry.currencyName,
+                                currencyCode: selectedCountry.currencyCode,
+                                currencySymbol: selectedCountry.currencySymbol,
+                              };
+
+                              setRegisterNumber(finalObject);
+                            }
+                          }}
+                          onlyCountries={["pk", "gb"]}
+                          preferredCountries={["pk", "gb"]}
+                          inputStyle={{ width: "100%" }}
+                        />
+                      </div>
                       {errors.number && touched.number && (
                         <p style={{ color: "red" }}>{errors.number}</p>
                       )}
@@ -145,7 +147,6 @@ const NumberVerification = () => {
                           )
                         }
                         disabled={values.number.length !== phoneNumberLimit}
-                        // disabled={!isValid || loading === "pending"} // ✅ disable until valid
                       />
                     </form>
                   </Col>

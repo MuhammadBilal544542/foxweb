@@ -1,11 +1,11 @@
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { Link, useNavigate } from "react-router-dom";
+import { Container, Row, Col, Spinner } from "react-bootstrap";
 import MainInput from "../../../Share/Input/MainInput";
 import { useDispatch, useSelector } from "react-redux";
 import MainIntro from "../../../Share/Intro/MainIntro";
 import MainButton from "../../../Share/Button/MainButton";
-import { Container, Row, Col, NavbarBrand } from "react-bootstrap";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import LeftSideLogo from "../../../Share/LogoSidePage/LeftSideLogo";
 import { sigUpProfile } from "../../../Redux/features/User/userApi.js";
 
@@ -14,14 +14,15 @@ const SigUpProfile = () => {
   const { loading } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const location = useLocation();
   const handleSigUpProfile = async (values) => {
     const formData = new FormData();
-    formData.append("firstName", values.firstName);
-    formData.append("lastName", values.lastName);
     formData.append("dob", values.dob);
     formData.append("gender", values.gender);
-    formData.append("profileImage", values.profileImage); 
+    formData.append("lastName", values.lastName);
+    formData.append("firstName", values.firstName);
+    formData.append("userId", location?.state?.Id);
+    formData.append("profileImage", values.profileImage);
 
     const data = {
       apiEndpoint: "/api/Signup/update-UserProfile",
@@ -30,12 +31,13 @@ const SigUpProfile = () => {
 
     dispatch(sigUpProfile(data)).then((res) => {
       if (res.type === "sigUpProfile/fulfilled") {
-        navigate("/emailRegister");
+        navigate("/emailVerification");
       }
     });
   };
   const sigUpProfileSchema = Yup.object({
-    gender: Yup.string().required("Gender is required"),
+    // gender: Yup.string().required("Gender is required"),
+    gender: Yup.string(),
     dob: Yup.date().required("Date of Birth is required"),
     lastName: Yup.string().required("Last name is required"),
     firstName: Yup.string().required("First name is required"),
@@ -50,6 +52,7 @@ const SigUpProfile = () => {
     touched,
     errors,
     setFieldValue,
+    isValid,
   } = useFormik({
     initialValues: {
       firstName: "",
@@ -109,7 +112,7 @@ const SigUpProfile = () => {
                 />
 
                 <Row className="justify-content-center">
-                  <Col md={7}>
+                  <Col sm={9}>
                     <form onSubmit={handleSubmit}>
                       <input
                         type="file"
@@ -195,7 +198,14 @@ const SigUpProfile = () => {
                       <MainButton
                         btnClassName="text-uppercase bg-black border-0 w-100 p-3 mt-5 text-white"
                         type="submit"
-                        Text="next"
+                        Text={
+                          loading === "pending" ? (
+                            <Spinner animation="border" size="sm" />
+                          ) : (
+                            "Next"
+                          )
+                        }
+                        // disabled={}
                       />
                     </form>
 

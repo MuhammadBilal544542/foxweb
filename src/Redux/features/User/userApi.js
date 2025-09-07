@@ -618,7 +618,7 @@ export const sigUpProfile = createAsyncThunk(
   "sigUpProfile",
   async ({ apiEndpoint, requestData }, thunkAPI) => {
     try {
-      const response = await axiosInstance.post(apiEndpoint, requestData);
+      const response = await axiosInstance.put(apiEndpoint, requestData);
       Toaster.success(response?.data?.message);
       return response?.data?.data;
     } catch (error) {

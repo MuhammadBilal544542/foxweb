@@ -1,12 +1,12 @@
 import * as Yup from "yup";
 import { useState } from "react";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Container, Row, Col } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import MainIntro from "../../../Share/Intro/MainIntro";
 import MainInput from "../../../Share/Input/MainInput";
 import MainButton from "../../../Share/Button/MainButton";
+import { Container, Row, Col, Spinner } from "react-bootstrap";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import LeftSideLogo from "../../../Share/LogoSidePage/LeftSideLogo";
 import { setNewPassword } from "../../../Redux/features/User/userApi";
 
@@ -15,18 +15,30 @@ const SetNewPassword = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const { loading } = useSelector((state) => state.user);
 
   const userDetails = location?.state?.details;
   console.log("userDetails------------>", userDetails);
   const handleSetNewPassword = () => {
     const data = {
       apiEndpoint: "/api/Signup/register-Password",
-      requestData: { password: values.password },
+      requestData: {
+        password: values.password,
+        userId: userDetails.id,
+        countryName: userDetails.countryName,
+        currencySymbol: userDetails.currencySymbol,
+        currencyCode: userDetails.currencyCode,
+        primaryNumber: location.state.userNumber,
+      },
     };
 
     dispatch(setNewPassword(data)).then((res) => {
       if (res.type === "setNewPassword/fulfilled") {
-        navigate("/login"); 
+        navigate("/sigUpProfile", {
+          state: {
+            Id: userDetails.id,
+          },
+        });
       }
     });
   };
@@ -77,7 +89,7 @@ const SetNewPassword = () => {
                 />
 
                 <Row className="justify-content-center">
-                  <Col md={7}>
+                  <Col sm={9}>
                     <form onSubmit={handleSubmit}>
                       {/* Password Field */}
                       <MainInput
@@ -127,7 +139,13 @@ const SetNewPassword = () => {
                       <MainButton
                         btnClassName="text-uppercase bg-black border-0 w-100 p-3 mt-3 text-white"
                         type="submit"
-                        Text="Set Password"
+                        Text={
+                          loading === "pending" ? (
+                            <Spinner animation="border" size="sm" />
+                          ) : (
+                            "Next"
+                          )
+                        }
                       />
                     </form>
 

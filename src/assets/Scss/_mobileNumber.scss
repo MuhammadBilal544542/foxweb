@@ -1,31 +1,35 @@
-.mobileNumber {
-  border: 1px solid #000000 !important; // light gray border
-  border-radius: 10px !important; // soft corners
-  .form-control {
-    height: 50px !important; // normal input height
-    font-size: 16px !important; // input text size
-    color: #374151 !important; // dark gray text
-    box-shadow: none !important; // no shadow
-    outline: none !important;
-    border: none !important;
-    border-radius: 10px !important; // soft corners
+.react-phone-input-2 {
+  border: 1.5px solid black;
+  padding: 5px 10px;
+  border-radius: 10px;
+  .mobileNumber {
+    margin-top: -7px;
+    .form-control {
+      height: 50px !important; // normal input height
+      font-size: 16px !important; // input text size
+      color: #374151 !important; // dark gray text
+      box-shadow: none !important; // no shadow
+      outline: none !important;
+      border: none !important;
+      border-radius: 10px !important; // soft corners
 
-    &::placeholder {
-      color: #6b7280; // lighter gray placeholder
-      font-size: 15px;
-    }
+      &::placeholder {
+        color: #6b7280; // lighter gray placeholder
+        font-size: 15px;
+      }
 
-    &:focus {
-      border-color: #2563eb; // blue border on focus
+      &:focus {
+        border-color: #2563eb; // blue border on focus
+      }
     }
-  }
-  .flag-dropdown {
-    border: 1.5px solid black !important;
-    border: none !important ;
-    border-radius: 12px !important; // soft corners
-    .selected-flag {
+    .flag-dropdown {
+      border: 1.5px solid black !important;
+      border: none !important ;
       border-radius: 12px !important; // soft corners
-      background: white !important;
+      .selected-flag {
+        border-radius: 12px !important; // soft corners
+        background: white !important;
+      }
     }
   }
 }
