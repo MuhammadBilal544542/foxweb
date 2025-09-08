@@ -1,27 +1,52 @@
-import { Container, Row, Col } from "react-bootstrap";
-import MainInput from "../../../Share/Input/MainInput";
-import MainButton from "../../../Share/Button/MainButton";
-import MainIntro from "../../../Share/Intro/MainIntro";
-import LeftSideLogo from "../../../Share/LogoSidePage/LeftSideLogo";
-import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Link, useNavigate } from "react-router-dom";
-import { IoMdArrowRoundBack } from "react-icons/io";
+import { useFormik } from "formik";
+import { Container, Row, Col, Spinner } from "react-bootstrap";
+import MainInput from "../../../Share/Input/MainInput";
+import MainIntro from "../../../Share/Intro/MainIntro";
+import MainButton from "../../../Share/Button/MainButton";
+import { useNavigate, useLocation } from "react-router-dom";
+import LeftSideLogo from "../../../Share/LogoSidePage/LeftSideLogo";
+import { emailVerification } from "../../../Redux/features/User/userApi";
+import { useDispatch, useSelector } from "react-redux";
 
 const EmailVerification = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.user);
+
+  const handleEmailVerification = () => {
+    const data = {
+      apiEndpoint: "/api/Signup/update-user-contact",
+      requestData: {
+        text: values.email,
+        userId: location?.state?.Id,
+        type: 2,
+      },
+    };
+
+    dispatch(emailVerification(data)).then((res) => {
+      if (res.type === "emailVerification/fulfilled") {
+        navigate("/otpVerification", {
+          // state: {
+          //   details: location?.state?.details,
+          //   userNumber: location.state.userNumber,
+          // },
+        });
+      }
+    });
+  };
 
   const schema = Yup.object({
     email: Yup.string().email("Invalid email").required("Email is required"),
   });
 
-  const formik = useFormik({
-    initialValues: { email: "" },
-    validationSchema: schema,
-    onSubmit: (values) => {
-      console.log("Form submitted:", values);
-    },
-  });
+  const { handleBlur, handleSubmit, values, touched, errors, handleChange } =
+    useFormik({
+      initialValues: { email: "" },
+      validationSchema: schema,
+      onSubmit: handleEmailVerification,
+    });
 
   return (
     <div className="login-screen">
@@ -51,38 +76,34 @@ const EmailVerification = () => {
                 />
 
                 <Row className="justify-content-center">
-                  <Col md={7}>
-                    <form onSubmit={formik.handleSubmit}>
+                  <Col md={9}>
+                    <form onSubmit={handleSubmit}>
                       <MainInput
                         type="email"
                         name="email"
                         label="Email"
                         placeholder="Enter your Email"
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
-                        value={formik.values.email}
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.email}
                         error={
-                          formik.touched.email && formik.errors.email
-                            ? formik.errors.email
-                            : ""
+                          touched.email && errors.email ? errors.email : ""
                         }
                       />
 
                       <MainButton
                         btnClassName="text-uppercase bg-black border-0 w-100 p-3 mt-5 text-white"
                         type="submit"
-                        Text="Send OTP"
+                        Text={
+                          loading === "pending" ? (
+                            <Spinner animation="border" size="sm" />
+                          ) : (
+                            "Next"
+                          )
+                        }
+                        disabled={!values?.email}
                       />
                     </form>
-
-                    <div className="text-center mt-4">
-                      <Link to="/">
-                        Already have an account?{" "}
-                        <span className="text-decoration-underline">
-                          Sign In
-                        </span>
-                      </Link>
-                    </div>
                   </Col>
                 </Row>
               </Col>

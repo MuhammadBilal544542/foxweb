@@ -627,3 +627,17 @@ export const sigUpProfile = createAsyncThunk(
     }
   }
 );
+// Email Verification
+export const emailVerification = createAsyncThunk(
+  "emailVerification",
+  async ({ apiEndpoint, requestData }, thunkAPI) => {
+    try {
+      const response = await axiosInstance.put(apiEndpoint, requestData);
+      Toaster.success(response?.data?.message);
+      return response?.data?.data;
+    } catch (error) {
+      Toaster.error(error?.response?.data?.data?.message);
+      return thunkAPI.rejectWithValue({ statusCode: error.response.status });
+    }
+  }
+);

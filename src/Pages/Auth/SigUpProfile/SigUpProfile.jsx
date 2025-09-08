@@ -31,7 +31,11 @@ const SigUpProfile = () => {
 
     dispatch(sigUpProfile(data)).then((res) => {
       if (res.type === "sigUpProfile/fulfilled") {
-        navigate("/emailVerification");
+        navigate("/emailVerification", {
+          state: {
+            Id: location?.state?.Id,
+          },
+        });
       }
     });
   };
@@ -52,7 +56,6 @@ const SigUpProfile = () => {
     touched,
     errors,
     setFieldValue,
-    isValid,
   } = useFormik({
     initialValues: {
       firstName: "",

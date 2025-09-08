@@ -1,4 +1,4 @@
-import React, { useState } from "react";   // ✅ add useState
+import React, { useState } from "react"; // ✅ add useState
 import { Container, Row, Col } from "react-bootstrap";
 import MainInput from "../../../Share/Input/MainInput";
 import MainButton from "../../../Share/Button/MainButton";
@@ -21,23 +21,17 @@ const LoginScreen = () => {
       .required("Password is required"),
   });
 
-  const {
-    values,
-    handleBlur,
-    handleChange,
-    errors,
-    touched,
-    handleSubmit,
-  } = useFormik({
-    initialValues: {
-      number: "",
-      password: "",
-    },
-    validationSchema: loginSchema,
-    onSubmit: (values) => {
-      console.log("Form submitted:", values);
-    },
-  });
+  const { values, handleBlur, handleChange, errors, touched, handleSubmit } =
+    useFormik({
+      initialValues: {
+        number: "",
+        password: "",
+      },
+      validationSchema: loginSchema,
+      onSubmit: (values) => {
+        console.log("Form submitted:", values);
+      },
+    });
 
   return (
     <div className="login-screen">
@@ -69,13 +63,15 @@ const LoginScreen = () => {
                         name="number"
                         placeholder="Enter your number"
                         label="Number"
-                        error={touched.number && errors.number ? errors.number : ""}
+                        error={
+                          touched.number && errors.number ? errors.number : ""
+                        }
                       />
 
                       {/* Password Field */}
                       <MainInput
                         className="password"
-                        type={showPassword ? "text" : "password"}   // ✅ toggle
+                        type={showPassword ? "text" : "password"} // ✅ toggle
                         onBlur={handleBlur}
                         id="password"
                         onChange={handleChange}
@@ -83,14 +79,18 @@ const LoginScreen = () => {
                         name="password"
                         placeholder="Enter your password"
                         label="Password"
-                        error={touched.password && errors.password ? errors.password : ""}
+                        error={
+                          touched.password && errors.password
+                            ? errors.password
+                            : ""
+                        }
                       />
 
                       <div className="d-flex justify-content-between mb-3">
                         <div className="">
-
                           <input type="checkbox" id="pass" className="me-2" />
-                          <label htmlFor="pass"
+                          <label
+                            htmlFor="pass"
                             onClick={() => setShowPassword(!showPassword)} // ✅ toggle
                             style={{ cursor: "pointer" }}
                           >
@@ -98,7 +98,7 @@ const LoginScreen = () => {
                           </label>
                         </div>
                         <Link
-                          to="/forgotPassword"
+                          to="/emailVerification"
                           className="text-decoration-underline"
                         >
                           Forgot Password?
@@ -112,10 +112,13 @@ const LoginScreen = () => {
                       />
                     </form>
                     <div className="text-center mt-4">
-                      <Link to="/numberVerification">Don't have an account? <span className="text-decoration-underline">Sign up</span></Link>
+                      <Link to="/numberVerification">
+                        Don't have an account?{" "}
+                        <span className="text-decoration-underline">
+                          Sign up
+                        </span>
+                      </Link>
                     </div>
-
-
                   </Col>
                 </Row>
               </Col>
@@ -125,6 +128,6 @@ const LoginScreen = () => {
       </Container>
     </div>
   );
-}
+};
 
 export default LoginScreen;

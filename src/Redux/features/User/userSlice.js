@@ -47,6 +47,7 @@ import {
   otpVerification,
   setNewPassword,
   sigUpProfile,
+  emailVerification
 } from "./userApi";
 
 export const userSlice = createSlice({
@@ -516,6 +517,16 @@ export const userSlice = createSlice({
         state.loading = "succeeded";
       })
       .addCase(sigUpProfile.rejected, (state) => {
+        state.loading = "failed";
+      })
+      // ------------------------------------------------------
+      .addCase(emailVerification.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(emailVerification.fulfilled, (state) => {
+        state.loading = "succeeded";
+      })
+      .addCase(emailVerification.rejected, (state) => {
         state.loading = "failed";
       })
       // ------------------------------------------------------
